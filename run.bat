@@ -61,7 +61,11 @@ if errorlevel 1 (
     exit /b 1
 )
 
-REM Start server
+REM Create superuser if needed
+echo.
+echo Creating admin account (if you don't have one yet)...
+python manage.py createsuperuser
+echo.
 echo.
 echo ===============================================
 echo Server starting at http://127.0.0.1:8000/

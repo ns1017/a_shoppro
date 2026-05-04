@@ -2,11 +2,35 @@
 
 This repository contains the AutoShop Pro web app built with Django. Below is my best attempt at clear instructions for someone who isn't technically inclined.
 
+**Quick Start (Windows Only):** Double-click `run.bat` in the project folder. The app will start automatically.
+
 Important: When this guide references files, they are paths inside the project. For example, the settings file is `autoshop/settings.py` and templates live under `templates/`.
 
 Prerequisites (what you need on your computer):
 - Python 3.10 or newer installed. You can check by opening a terminal and typing `python --version`.
 - Basic terminal access, on Windows use PowerShell.
+
+## Easy Way (Windows): Use the Launcher
+
+The easiest way to run AutoShop Pro is to **double-click `run.bat`** in the project folder.
+
+This will automatically:
+1. Create a Python environment (if it doesn't exist)
+2. Install all dependencies
+3. Build the CSS files
+4. Set up the database
+5. Prompt you to create an admin account (enter username, email, password)
+6. Start the server
+7. Open the browser to `http://127.0.0.1:8000/`
+
+That's it! The server keeps running. Press `Ctrl+C` in the terminal window to stop it.
+
+**Alternative (PowerShell):** If the batch file doesn't work, open PowerShell in the project folder and run:
+```
+.\run.ps1
+```
+
+## Manual Way (if you prefer step-by-step control)
 
 1) Create and activate a Python virtual environment
 
@@ -20,8 +44,6 @@ python -m venv .venv
 
 - The first command creates an isolated Python environment in a hidden folder called `.venv`.
 - The second command switches your terminal to use the environment. You should see `(.venv)` appear at the start of the prompt.
-
-2) Install Python dependencies
 
 With the virtual environment activated, install dependencies listed in `requirements.txt`:
 
