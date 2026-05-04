@@ -2,7 +2,7 @@
 
 This repository contains the AutoShop Pro web app built with Django. Below is my best attempt at clear instructions for someone who isn't technically inclined.
 
-**Quick Start (Windows Only):** Three simple steps:
+**Quick Start (Windows Only):** 
 1. Open PowerShell in the project folder
 2. Run `.\install.ps1` to install dependencies in powershell
 3. Run `.\initialize.bat` to set up the database in cmd
