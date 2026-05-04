@@ -1,0 +1,43 @@
+{% extends 'base.html' %}
+{% block title %}Vehicles | AutoShop Pro{% endblock %}
+{% block page_header %}
+<div class="mb-6 flex flex-col gap-4 sm:flex-row sm:items-end sm:justify-between">
+    <div>
+        <p class="text-sm uppercase tracking-[0.3em] text-slate-500">Management</p>
+        <h1 class="mt-2 text-3xl font-semibold text-slate-950">Vehicles</h1>
+    </div>
+    <a href="{% url 'vehicle_add' %}" class="inline-flex items-center justify-center rounded-2xl bg-blue-600 px-4 py-3 text-sm font-semibold text-white hover:bg-blue-500">+ Add Vehicle</a>
+</div>
+<form class="mb-6 flex gap-3" method="get">
+    <input name="q" value="{{ request.GET.q }}" placeholder="Search VIN, plate, make, model, customer" class="w-full rounded-2xl border border-slate-300 bg-white px-4 py-3 shadow-sm outline-none focus:border-blue-500 focus:ring-2 focus:ring-blue-500/20">
+    <button class="rounded-2xl bg-slate-900 px-5 py-3 font-semibold text-white">Search</button>
+</form>
+{% endblock %}
+{% block content %}
+<div class="panel overflow-hidden rounded-3xl">
+    <table class="min-w-full divide-y divide-slate-200 text-sm">
+        <thead class="bg-slate-50 text-slate-500">
+            <tr>
+                <th class="px-4 py-3 text-left font-medium">Vehicle</th>
+                <th class="px-4 py-3 text-left font-medium">Customer</th>
+                <th class="px-4 py-3 text-left font-medium">VIN</th>
+                <th class="px-4 py-3 text-left font-medium">Plate</th>
+                <th class="px-4 py-3 text-left font-medium"></th>
+            </tr>
+        </thead>
+        <tbody class="divide-y divide-slate-200 bg-white">
+            {% for vehicle in vehicles %}
+            <tr>
+                <td class="px-4 py-3 font-medium text-slate-900">{{ vehicle.year }} {{ vehicle.make }} {{ vehicle.model }}</td>
+                <td class="px-4 py-3 text-slate-600">{{ vehicle.customer.name }}</td>
+                <td class="px-4 py-3 text-slate-600">{{ vehicle.vin }}</td>
+                <td class="px-4 py-3 text-slate-600">{{ vehicle.license_plate|default:'-' }}</td>
+                <td class="px-4 py-3 text-right"><a href="{% url 'vehicle_edit' vehicle.id %}" class="font-medium text-blue-700 hover:text-blue-600">Edit</a></td>
+            </tr>
+            {% empty %}
+            <tr><td colspan="5" class="px-4 py-8 text-center text-slate-500">No vehicles found.</td></tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</div>
+{% endblock %}

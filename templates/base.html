@@ -1,0 +1,51 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% block title %}AutoShop Pro{% endblock %}</title>
+    <link rel="stylesheet" href="{% static 'css/style.css' %}">
+    <link rel="stylesheet" href="{% static 'css/site.css' %}">
+    {% block extra_head %}{% endblock %}
+</head>
+<body class="min-h-screen bg-slate-100 text-slate-900">
+<div class="min-h-screen lg:flex">
+    <aside class="bg-slate-950 text-white lg:w-72">
+        <div class="border-b border-white/10 px-6 py-5">
+            <div class="text-xs uppercase tracking-[0.3em] text-slate-400">AutoShop Pro</div>
+            <div class="mt-1 text-2xl font-semibold text-blue-400">Shop Manager</div>
+        </div>
+        <nav class="space-y-1 px-3 py-4 text-sm">
+            <a href="{% url 'dashboard' %}" class="nav-link {% if request.resolver_match.url_name == 'dashboard' %}active{% endif %}">Dashboard</a>
+            <a href="{% url 'job_board' %}" class="nav-link {% if request.resolver_match.url_name == 'job_board' %}active{% endif %}">Workflow</a>
+            <a href="{% url 'customer_list' %}" class="nav-link {% if request.resolver_match.url_name|slice:':8' == 'customer' %}active{% endif %}">Customers</a>
+            <a href="{% url 'vehicle_list' %}" class="nav-link {% if request.resolver_match.url_name|slice:':7' == 'vehicle' %}active{% endif %}">Vehicles</a>
+            <a href="{% url 'part_list' %}" class="nav-link {% if request.resolver_match.url_name|slice:':4' == 'part' %}active{% endif %}">Inventory</a>
+            <a href="{% url 'report_dashboard' %}" class="nav-link {% if request.resolver_match.url_name == 'report_dashboard' %}active{% endif %}">Reports</a>
+        </nav>
+        <div class="border-t border-white/10 px-6 py-4 text-sm text-slate-300">
+            {% if user.is_authenticated %}
+                <div class="mb-3">Logged in as <span class="font-medium text-white">{{ user.username }}</span></div>
+                <a href="{% url 'logout' %}" class="inline-flex items-center rounded-xl bg-white/10 px-3 py-2 text-white hover:bg-white/15">Logout</a>
+            {% endif %}
+        </div>
+    </aside>
+
+    <main class="flex-1 overflow-y-auto">
+        <div class="mx-auto max-w-7xl px-4 py-6 sm:px-6 lg:px-8">
+            {% block page_header %}{% endblock %}
+            {% if messages %}
+                <div class="mb-6 space-y-3">
+                    {% for message in messages %}
+                        <div class="rounded-2xl border border-blue-200 bg-blue-50 px-4 py-3 text-sm text-blue-900">{{ message }}</div>
+                    {% endfor %}
+                </div>
+            {% endif %}
+            {% block content %}{% endblock %}
+        </div>
+    </main>
+</div>
+{% block extra_js %}{% endblock %}
+</body>
+</html>

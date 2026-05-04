@@ -1,0 +1,42 @@
+{% extends 'base.html' %}
+{% block title %}Reports | AutoShop Pro{% endblock %}
+{% block content %}
+<div class="mb-6">
+    <p class="text-sm uppercase tracking-[0.3em] text-slate-500">Reports</p>
+    <h1 class="mt-2 text-3xl font-semibold text-slate-950">Shop Reports</h1>
+</div>
+<div class="grid gap-4 md:grid-cols-2 xl:grid-cols-4">
+    <div class="panel rounded-3xl p-5"><p class="text-sm text-slate-500">Jobs Today</p><p class="mt-3 text-3xl font-semibold">{{ daily_job_count }}</p></div>
+    <div class="panel rounded-3xl p-5"><p class="text-sm text-slate-500">Jobs This Week</p><p class="mt-3 text-3xl font-semibold">{{ weekly_job_count }}</p></div>
+    <div class="panel rounded-3xl p-5"><p class="text-sm text-slate-500">Revenue Today</p><p class="mt-3 text-3xl font-semibold">${{ daily_revenue|floatformat:2 }}</p></div>
+    <div class="panel rounded-3xl p-5"><p class="text-sm text-slate-500">Revenue This Week</p><p class="mt-3 text-3xl font-semibold">${{ weekly_revenue|floatformat:2 }}</p></div>
+</div>
+<div class="mt-6 grid gap-6 xl:grid-cols-2">
+    <div class="panel rounded-3xl p-6">
+        <h2 class="text-lg font-semibold">Status Breakdown</h2>
+        <div class="mt-4 space-y-3 text-sm">
+            {% for row in status_breakdown %}
+                <div class="flex items-center justify-between rounded-2xl bg-slate-50 px-4 py-3">
+                    <span>{{ row.status }}</span>
+                    <strong>{{ row.total }}</strong>
+                </div>
+            {% empty %}
+                <p class="text-slate-500">No jobs yet.</p>
+            {% endfor %}
+        </div>
+    </div>
+    <div class="panel rounded-3xl p-6">
+        <h2 class="text-lg font-semibold">Recent Completed Jobs</h2>
+        <div class="mt-4 space-y-3">
+            {% for job in recent_completed_jobs %}
+                <div class="rounded-2xl border border-slate-200 bg-white px-4 py-3 text-sm">
+                    <div class="font-medium text-slate-950">{{ job.vehicle.year }} {{ job.vehicle.make }} {{ job.vehicle.model }}</div>
+                    <div class="text-slate-600">{{ job.customer.name }} • ${{ job.actual_cost|floatformat:2 }}</div>
+                </div>
+            {% empty %}
+                <p class="text-sm text-slate-500">No completed jobs yet.</p>
+            {% endfor %}
+        </div>
+    </div>
+</div>
+{% endblock %}
