@@ -22,7 +22,7 @@
                 <th class="px-4 py-3 text-left font-medium">Phone</th>
                 <th class="px-4 py-3 text-left font-medium">Email</th>
                 <th class="px-4 py-3 text-left font-medium">Vehicles</th>
-                <th class="px-4 py-3 text-left font-medium"></th>
+                <th class="px-4 py-3 text-left font-medium">Actions</th>
             </tr>
         </thead>
         <tbody class="divide-y divide-slate-200 bg-white">
@@ -32,7 +32,18 @@
                 <td class="px-4 py-3 text-slate-600">{{ customer.phone|default:'-' }}</td>
                 <td class="px-4 py-3 text-slate-600">{{ customer.email|default:'-' }}</td>
                 <td class="px-4 py-3 text-slate-600">{{ customer.vehicles.count }}</td>
-                <td class="px-4 py-3 text-right"><a href="{% url 'customer_detail' customer.id %}" class="font-medium text-blue-700 hover:text-blue-600">View</a></td>
+                <td class="px-4 py-3 text-right">
+                    <div class="flex items-center justify-end gap-3">
+                        <a href="{% url 'customer_detail' customer.id %}" class="font-medium text-blue-700 hover:text-blue-600">View</a>
+                        <a href="{% url 'customer_edit' customer.id %}" class="font-medium text-slate-700 hover:text-slate-900">Edit</a>
+                        {% if user.is_staff %}
+                        <form method="post" action="{% url 'customer_delete' customer.id %}" onsubmit="return confirm('Delete this customer and their related records?');">
+                            {% csrf_token %}
+                            <button type="submit" class="font-medium text-red-700 hover:text-red-600">Delete</button>
+                        </form>
+                        {% endif %}
+                    </div>
+                </td>
             </tr>
             {% empty %}
             <tr><td colspan="5" class="px-4 py-8 text-center text-slate-500">No customers found.</td></tr>

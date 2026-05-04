@@ -14,10 +14,59 @@
                 {% if field.errors %}<p class="mt-1 text-sm text-red-600">{{ field.errors|striptags }}</p>{% endif %}
             </div>
         {% endfor %}
-        <div class="md:col-span-2 flex gap-3">
+        <div class="md:col-span-2 flex flex-wrap gap-3">
             <button class="rounded-2xl bg-blue-600 px-4 py-3 font-semibold text-white hover:bg-blue-500">Save</button>
             <a href="{% url 'job_board' %}" class="rounded-2xl border border-slate-300 bg-white px-4 py-3 font-semibold text-slate-700 hover:bg-slate-50">Cancel</a>
+            {% if object and object.pk and user.is_staff %}
+            <form method="post" action="{% url 'job_delete' object.id %}" onsubmit="return confirm('Delete this job permanently?');">
+                {% csrf_token %}
+                <button type="submit" class="rounded-2xl bg-red-600 px-4 py-3 font-semibold text-white hover:bg-red-700">Delete</button>
+            </form>
+            {% endif %}
         </div>
     </form>
 </div>
+
+<script>
+document.addEventListener("DOMContentLoaded", function () {
+    const customerSelect = document.getElementById("id_customer");
+    const vehicleSelect = document.getElementById("id_vehicle");
+    
+    if (!customerSelect || !vehicleSelect) return;
+    
+    function updateVehicles() {
+        const customerId = customerSelect.value;
+        
+        if (!customerId) {
+            // If no customer selected, show all vehicles
+            vehicleSelect.querySelectorAll("option").forEach(opt => opt.style.display = "");
+            return;
+        }
+        
+        // Fetch vehicles for this customer
+        fetch(`{% url 'get_vehicles_by_customer' %}?customer_id=${customerId}`)
+            .then(response => response.json())
+            .then(data => {
+                const vehicleIds = new Set(data.vehicles.map(v => v.id));
+                
+                // Hide all options first
+                vehicleSelect.querySelectorAll("option").forEach(opt => {
+                    if (opt.value === "") {
+                        opt.style.display = "";  // Keep the empty option
+                    } else {
+                        opt.style.display = vehicleIds.has(parseInt(opt.value)) ? "" : "none";
+                    }
+                });
+                
+                // Reset selection to empty if current selection is not available
+                if (!vehicleIds.has(parseInt(vehicleSelect.value))) {
+                    vehicleSelect.value = "";
+                }
+            })
+            .catch(err => console.error("Error fetching vehicles:", err));
+    }
+    
+    customerSelect.addEventListener("change", updateVehicles);
+});
+</script>
 {% endblock %}
