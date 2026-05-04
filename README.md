@@ -2,28 +2,63 @@
 
 This repository contains the AutoShop Pro web app built with Django. Below is my best attempt at clear instructions for someone who isn't technically inclined.
 
-**Quick Start (Windows Only):** Double-click `run.bat` in the project folder. The app will start automatically.
+**Quick Start (Windows Only):** Three simple steps:
+1. Open PowerShell in the project folder
+2. Run `.\install.ps1` to install dependencies in powershell
+3. Run `.\initialize.bat` to set up the database in cmd
+4. Run `.\run.bat` to start the app in cmd
 
 Important: When this guide references files, they are paths inside the project. For example, the settings file is `autoshop/settings.py` and templates live under `templates/`.
 
-Prerequisites (what you need on your computer):
-- Python 3.10 or newer installed. You can check by opening a terminal and typing `python --version`.
-- Basic terminal access, on Windows use PowerShell.
+Prerequisites:
+- Windows operating system
+- An internet connection (for the first run to download dependencies)
+- The scripts will check for Python and Node.js and attempt to install them if missing
 
-## Easy Way (Windows): Use the Launcher
+## Easy Way (Windows): Use the PowerShell/CMD Scripts
 
-The easiest way to run AutoShop Pro is to **double-click `run.bat`** in the project folder.
+The easiest way to run AutoShop Pro is to use the provided PowerShell scripts. Open PowerShell in the project folder and follow these three steps:
+
+### Step 1: Install Dependencies
+```powershell
+.\install.ps1
+```
 
 This will automatically:
-1. Create a Python environment (if it doesn't exist)
-2. Install all dependencies
-3. Build the CSS files
-4. Set up the database
-5. Prompt you to create an admin account (enter username, email, password)
-6. Start the server
-7. Open the browser to `http://127.0.0.1:8000/`
+- Check for Python and install it if missing (via winget if available)
+- Check for Node.js/npm and install if missing (via winget if available)
+- Create a Python virtual environment (if it doesn't exist)
+- Install all Python dependencies from `requirements.txt`
+- Install all Node.js dependencies via npm
+- Build the Tailwind CSS files
 
-That's it! The server keeps running. Press `Ctrl+C` in the terminal window to stop it.
+### Step 2: Initialize the Database
+```cmd
+.\initialize.bat
+```
+
+This will:
+- Run database migrations to set up tables
+- Prompt you to create an admin/superuser account (enter username, email, password)
+- Optionally seed demo data (customers, vehicles, jobs, parts)
+
+### Step 3: Launch the App
+```cmd
+.\run.bat
+```
+
+The server will start at `http://127.0.0.1:8000/`. Open this URL in your web browser.
+
+Press `Ctrl+C` in the PowerShell window to stop the server.
+
+**Note:** If you see an execution policy error, run this once first:
+```powershell
+Set-ExecutionPolicy -ExecutionPolicy RemoteSigned -Scope CurrentUser
+```
+
+If the scripts cannot auto-install Python or Node.js:
+- **Python**: Download from https://www.python.org/downloads/ (check "Add Python to PATH" during installation)
+- **Node.js**: Download from https://nodejs.org/ (npm comes with it)
 
 ## Manual Way (if you prefer step-by-step control)
 
