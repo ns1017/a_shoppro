@@ -1,85 +1,80 @@
 @echo off
-REM AutoShop Pro Launcher
-REM This script activates the venv, runs migrations, and starts the Django server
+REM AutoShop Pro Launcher - Improved Sequential Version
+REM For non-technical users
 
 setlocal enabledelayedexpansion
 
 echo ===============================================
-echo AutoShop Pro - Launching...
+echo          AutoShop Pro - Launcher
 echo ===============================================
-
-REM Check and rename directory if it's in GitHub export format (a_shoppro-main, etc)
 echo.
-echo Checking directory name...
+
+REM === 1. Directory rename check ===
+echo Checking folder name...
 for %%i in (.) do set "CURRENT_DIR=%%~ni"
 if "%CURRENT_DIR%"=="a_shoppro-main" (
-    echo Found GitHub export folder name. Renaming to a_shop...
+    echo Renaming folder from a_shoppro-main to a_shop...
     cd ..
     ren a_shoppro-main a_shop
     if errorlevel 1 (
-        echo ERROR: Could not rename directory. Please manually rename 'a_shoppro-main' to 'a_shop'
+        echo ERROR: Could not rename folder.
+        echo Please manually rename the folder to "a_shop" and run this script again.
         pause
         exit /b 1
     )
     cd a_shop
-    echo Directory renamed successfully to a_shop
+    echo Folder renamed successfully.
 ) else if "%CURRENT_DIR%"=="a_shop" (
-    echo Directory already named correctly: a_shop
+    echo Folder name is correct.
 ) else (
-    echo WARNING: Current directory is '%CURRENT_DIR%', not 'a_shop'
-    echo If you downloaded from GitHub, the folder may need manual renaming for consistency
+    echo WARNING: Folder is named "%CURRENT_DIR%". Expected "a_shop".
+    echo If this is a GitHub download, rename it to "a_shop".
 )
-
-echo ===============================================
-
-REM Check for Python
 echo.
-echo Checking for Python...
+
+REM === 2. Python Check & Install ===
+echo Checking Python...
 python --version >nul 2>&1
 if errorlevel 1 (
-    echo ERROR: Python is not installed or not in PATH.
+    echo Python not found.
+    echo Attempting to install Python 3.11 via winget...
+    winget install -e --id Python.Python.3.11 --accept-source-agreements --accept-package-agreements
     echo.
-    echo Attempting to install Python via winget...
-    winget install -e --id Python.Python.3.11 >nul 2>&1
+    echo IMPORTANT: Python installation may still be running.
+    echo Please wait until the Python installer finishes, THEN press any key to continue...
+    pause
+    echo Re-checking Python...
+    python --version >nul 2>&1
     if errorlevel 1 (
-        echo.
-        echo FAILED: Could not auto-install Python.
-        echo Please install Python 3.10+ manually from https://www.python.org/downloads/
-        echo Make sure to check "Add Python to PATH" during installation.
-        echo.
+        echo Python is still not available.
+        echo Please install it manually from https://www.python.org/downloads/ (check "Add to PATH")
         pause
         exit /b 1
-    ) else (
-        echo Python installed successfully. Please restart this script.
-        pause
-        exit /b 0
     )
 ) else (
     echo Python found: 
     python --version
 )
-
-REM Check for Node.js/npm
 echo.
-echo Checking for Node.js and npm...
+
+REM === 3. Node.js Check & Install ===
+echo Checking Node.js...
 npm --version >nul 2>&1
 if errorlevel 1 (
-    echo ERROR: Node.js/npm is not installed or not in PATH.
-    echo.
+    echo Node.js not found.
     echo Attempting to install Node.js via winget...
-    winget install -e --id OpenJS.NodeJS >nul 2>&1
+    winget install -e --id OpenJS.NodeJS --accept-source-agreements --accept-package-agreements
+    echo.
+    echo IMPORTANT: Node.js installation may still be running.
+    echo Wait for it to finish, THEN press any key...
+    pause
+    echo Re-checking Node.js...
+    npm --version >nul 2>&1
     if errorlevel 1 (
-        echo.
-        echo FAILED: Could not auto-install Node.js.
-        echo Please install Node.js from https://nodejs.org/
-        echo After installation, please restart this script.
-        echo.
+        echo Node.js is still not available.
+        echo Please install it manually from https://nodejs.org/
         pause
         exit /b 1
-    ) else (
-        echo Node.js installed successfully. Please restart this script.
-        pause
-        exit /b 0
     )
 ) else (
     echo Node.js found:
@@ -87,74 +82,65 @@ if errorlevel 1 (
     echo npm found:
     npm --version
 )
-
 echo ===============================================
+echo.
 
-REM Check if venv exists
+REM === 4. Virtual Environment ===
 if not exist ".venv\Scripts\activate.bat" (
     echo Creating Python virtual environment...
     python -m venv .venv
     if errorlevel 1 (
-        echo ERROR: Failed to create virtual environment
+        echo Failed to create venv.
         pause
         exit /b 1
     )
+    echo Virtual environment created.
+) else (
+    echo Virtual environment already exists.
 )
 
-REM Activate venv
 call .venv\Scripts\activate.bat
+echo Virtual environment activated.
+echo.
+
+REM === 5. Python Dependencies ===
+echo Installing/updating Python packages...
+pip install -r requirements.txt --upgrade
 if errorlevel 1 (
-    echo ERROR: Failed to activate virtual environment
-    pause
-    exit /b 1
+    echo Warning: pip install had issues. Check your internet connection.
 )
+echo.
 
-REM Install dependencies if needed
-if not exist ".venv\Lib\site-packages\django" (
-    echo Installing Python dependencies... An internet connection is required for this step.
-    pip install -r requirements.txt
-    if errorlevel 1 (
-        echo ERROR: Failed to install dependencies
-        pause
-        exit /b 1
-    )
-)
-
-REM Build CSS if style.css doesn't exist
+REM === 6. Tailwind CSS ===
 if not exist "static\css\style.css" (
     echo Building Tailwind CSS...
     if not exist "node_modules" (
+        echo Running npm install...
         call npm install
-        if errorlevel 1 (
-            echo WARNING: npm install failed. You may need to install Node.js from https://nodejs.org/
-        )
     )
-    if exist "node_modules" (
-        call npm run build:css
-    )
+    call npm run build:css
+    echo CSS build completed.
+) else (
+    echo CSS file already exists.
 )
+echo.
 
-REM Run migrations
+REM === 7. Database Setup ===
 echo Running database migrations...
 python manage.py migrate --noinput
-if errorlevel 1 (
-    echo ERROR: Migration failed
-    pause
-    exit /b 1
-)
-
-REM Create superuser if needed
 echo.
-echo Creating admin account (if you don't have one yet)...
+
+echo Setting up admin account (if needed)...
 python manage.py createsuperuser
 echo.
-echo.
+
+REM === 8. Start Server ===
 echo ===============================================
-echo Server starting at http://127.0.0.1:8000/
-echo Press Ctrl+C to stop
+echo Launching AutoShop Pro...
+echo Server will be available at: http://127.0.0.1:8000/
+echo Press Ctrl+C in this window to stop the server.
 echo ===============================================
 echo.
 
 python manage.py runserver
-
 pause
