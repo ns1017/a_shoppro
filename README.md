@@ -25,11 +25,6 @@ This will automatically:
 
 That's it! The server keeps running. Press `Ctrl+C` in the terminal window to stop it.
 
-**Alternative (PowerShell):** If the batch file doesn't work, open PowerShell in the project folder and run:
-```
-.\run.ps1
-```
-
 ## Manual Way (if you prefer step-by-step control)
 
 1) Create and activate a Python virtual environment
