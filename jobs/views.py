@@ -133,3 +133,19 @@ def update_job_status(request, pk):
     except Exception:
         pass
     return JsonResponse({"ok": True, "status": job.status})
+
+
+@login_required
+def get_vehicles_by_customer(request):
+    """Return vehicles for a given customer as JSON."""
+    from customers.models import Vehicle
+    
+    customer_id = request.GET.get("customer_id")
+    if not customer_id:
+        return JsonResponse({"vehicles": []})
+    
+    try:
+        vehicles = Vehicle.objects.filter(customer_id=int(customer_id)).values("id", "year", "make", "model", "license_plate", "vin")
+        return JsonResponse({"vehicles": list(vehicles)})
+    except (ValueError, TypeError):
+        return JsonResponse({"vehicles": []}, status=400)

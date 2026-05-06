@@ -12,6 +12,32 @@ function initKanban() {
 
     let draggedCardId = null;
 
+    function updateColumnState(column) {
+        const cardsInColumn = column.querySelectorAll('[data-job-card]');
+        const emptyState = column.querySelector('[data-empty-state]');
+        const emptyMessage = column.dataset.emptyMessage || 'No jobs found.';
+        const countBadge = column.previousElementSibling?.querySelector('[data-job-count]');
+
+        if (countBadge) {
+            countBadge.textContent = cardsInColumn.length.toString();
+        }
+
+        if (cardsInColumn.length === 0) {
+            if (!emptyState) {
+                const placeholder = document.createElement('div');
+                placeholder.dataset.emptyState = 'true';
+                placeholder.className = 'rounded-2xl border border-dashed border-slate-300 bg-slate-50 p-6 text-center text-sm text-slate-500';
+                placeholder.textContent = emptyMessage;
+                column.appendChild(placeholder);
+            }
+            return;
+        }
+
+        if (emptyState) {
+            emptyState.remove();
+        }
+    }
+
     cards.forEach(card => {
         card.addEventListener('dragstart', () => {
             draggedCardId = card.dataset.jobId;
@@ -40,15 +66,12 @@ function initKanban() {
             });
 
             if (response.ok) {
-                // Optimistic UI: move card to target column without reload
                 const targetColumn = document.querySelector(`[data-job-column][data-status="${targetStatus}"]`);
                 if (targetColumn && card) {
-                    // remove from old parent and append to new column
-                    card.classList.remove('opacity-60');
                     const oldParent = card.parentElement;
+                    card.classList.remove('opacity-60');
                     targetColumn.appendChild(card);
 
-                    // tiny visual feedback
                     card.style.transition = 'transform 0.18s ease, box-shadow 0.18s ease';
                     card.style.transform = 'scale(1.02)';
                     card.style.boxShadow = '0 8px 30px rgba(2,6,23,0.1)';
@@ -57,24 +80,18 @@ function initKanban() {
                         card.style.boxShadow = '';
                     }, 300);
 
-                    // update counts badges if present
-                    try {
-                        const dec = oldParent.previousElementSibling?.querySelector('span');
-                        const inc = targetColumn.previousElementSibling?.querySelector('span');
-                        if (dec) dec.textContent = Math.max(0, parseInt(dec.textContent || '0') - 1);
-                        if (inc) inc.textContent = (parseInt(inc.textContent || '0') + 1).toString();
-                    } catch (e) {
-                        // ignore UI count update errors
-                    }
+                    if (oldParent) updateColumnState(oldParent);
+                    updateColumnState(targetColumn);
                 } else {
                     window.location.reload();
                 }
             } else {
-                // show a brief error if update failed
                 alert('Unable to move job. Please refresh and try again.');
             }
         });
     });
+
+    columns.forEach(updateColumnState);
 }
 
 document.addEventListener('DOMContentLoaded', initKanban);
