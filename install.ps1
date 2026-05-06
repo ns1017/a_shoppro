@@ -20,7 +20,7 @@ $pythonExists = $null -ne (Get-Command python -ErrorAction SilentlyContinue)
 if (-not $pythonExists) {
     Write-Host "Python not found."
     Write-Host "Attempting to install Python 3.11 via winget..."
-    & winget install -e --id Python.Python.3.11 --accept-source-agreements --accept-package-agreements
+    & winget install Python.Python.3
     Write-Host ""
     Write-Host "IMPORTANT: Python installation may still be running."
     Read-Host "Please wait until the Python installer finishes, then press Enter to continue"
@@ -76,7 +76,7 @@ $npmExists = $null -ne (Get-Command npm -ErrorAction SilentlyContinue)
 if (-not $npmExists) {
     Write-Host "Node.js not found."
     Write-Host "Attempting to install Node.js via winget..."
-    & winget install -e --id OpenJS.NodeJS --accept-source-agreements --accept-package-agreements
+    & winget install OpenJS.NodeJS
     Write-Host ""
     Write-Host "IMPORTANT: Node.js installation may still be running."
     Read-Host "Wait for it to finish, then press Enter to continue"
