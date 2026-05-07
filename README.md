@@ -13,19 +13,26 @@ Prerequisites:
 
 1. Move to the project directory:
 <img width="1918" height="137" alt="step1" src="https://github.com/user-attachments/assets/050e9319-aa56-4248-97cd-14eb2feb8b4f" />
+
+
 Run in powershell
 
 2. Create a virtual environment:
 <img width="1918" height="25" alt="step2" src="https://github.com/user-attachments/assets/f1f55d78-f3c7-4370-b631-aa6e163e29d8" />
+
+
 `python -m venv .venv`
 This creates a local virtual environment
 
 3. Activate the virtual environment:
 <img width="1918" height="33" alt="step3" src="https://github.com/user-attachments/assets/dde0ffb7-53a0-4fa5-9dd4-5d9acef9ea4e" />
+
+
 `.\.venv\Scripts\Activate.ps1`
 
 4. Intall Django Dependency:
 <img width="1917" height="458" alt="step4" src="https://github.com/user-attachments/assets/4c435191-0088-4a52-8883-7d9229472233" />
+
 
 5. Close powershell, move to file explorer
 
@@ -33,14 +40,19 @@ This creates a local virtual environment
 <img width="1038" height="887" alt="ps1_install" src="https://github.com/user-attachments/assets/1e56c76c-4c50-4eb7-8a55-cca0c04822b5" />
 For the sole powershell (install.ps1) script, left-click, then right click. When the menu appears, click on 'Run with powershell'
 
+
 - Run `.\initialize.bat` to set up the database in cmd (you can double click the .bat files like normal)
-<img width="1038" height="887" alt="ps1_install" src="https://github.com/user-attachments/assets/6938e562-41a8-49fb-9a71-51cfb8e4c221" />
+<img width="1920" height="1080" alt="initialize_script" src="https://github.com/user-attachments/assets/6142122f-8abe-4ef3-a7fc-43dcc1a6be2f" />
+
+
 This batchfile asks you to create a username, email, and password.
 DO NOT LOSE THIS PASSWORD. I CAN NOT HELP YOU RECOVER IT!
 It also asks about demo data, which currently has to be deleted manually.
 
 - Run `.\run.bat` to start the app in cmd
-<img width="1038" height="887" alt="ps1_install" src="https://github.com/user-attachments/assets/8125ca56-074f-49ce-93d6-c48edc071ec2" />
+<img width="1920" height="1080" alt="server_running" src="https://github.com/user-attachments/assets/9a8c2d3f-1392-451a-8663-0da99794723d" />
+
+
 The server should now start, available at 127.0.0.1:8000, and can be stopped using Ctrl+C in the cmd.
 
 **Important:**
