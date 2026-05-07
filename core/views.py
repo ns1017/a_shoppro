@@ -2,6 +2,8 @@ from django.contrib.auth.decorators import login_required
 from django.db.models import Sum
 from django.shortcuts import render
 from django.utils import timezone
+from django.http import JsonResponse
+from django.utils.dateparse import parse_datetime
 
 from customers.models import Customer, Vehicle
 from jobs.models import Job
@@ -33,3 +35,42 @@ def dashboard(request):
         "vehicle_count": Vehicle.objects.count(),
     }
     return render(request, "core/dashboard.html", context)
+
+
+@login_required
+def calendar_events(request):
+    """Return JSON list of Jobs with appointment_date for FullCalendar.
+
+    Accepts `start` and `end` GET params (ISO datetimes) and filters
+    appointment_date between them when provided.
+    """
+    start = request.GET.get("start")
+    end = request.GET.get("end")
+
+    events_qs = Job.objects.exclude(appointment_date__isnull=True)
+    try:
+        if start:
+            start_dt = parse_datetime(start)
+            if start_dt:
+                events_qs = events_qs.filter(appointment_date__gte=start_dt)
+        if end:
+            end_dt = parse_datetime(end)
+            if end_dt:
+                events_qs = events_qs.filter(appointment_date__lte=end_dt)
+    except Exception:
+        # on parse failure, fall back to returning all with appointment_date
+        pass
+
+    events = []
+    for job in events_qs:
+        if not job.appointment_date:
+            continue
+        title = f"{job.vehicle} - {job.technician or 'Unassigned'}"
+        events.append({
+            "id": job.pk,
+            "title": title,
+            "start": job.appointment_date.isoformat(),
+            "url": f"/jobs/{job.pk}/",
+        })
+
+    return JsonResponse(events, safe=False)
