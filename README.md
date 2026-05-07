@@ -30,7 +30,7 @@ This creates a local virtual environment
 
 `.\.venv\Scripts\Activate.ps1`
 
-4. Intall external libraries:
+4. Install external libraries:
 <img width="1917" height="458" alt="step4" src="https://github.com/user-attachments/assets/4c435191-0088-4a52-8883-7d9229472233" />
 
 
