@@ -4,6 +4,7 @@ document.addEventListener('DOMContentLoaded', function() {
 
   var calendar = new FullCalendar.Calendar(calendarEl, {
     initialView: 'dayGridMonth',
+    timeZone: 'UTC',
     height: 'auto',
     headerToolbar: {
       left: 'prev,next today',
