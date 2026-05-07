@@ -2,59 +2,51 @@
 
 This repository contains the AutoShop Pro web app built with Django. Below is my best attempt at clear instructions for someone who isn't technically inclined.
 
-**Quick Start (Windows Only):** 
-1. Open PowerShell in the project folder
-2. Run `.\install.ps1` to install dependencies in powershell
-3. Run `.\initialize.bat` to set up the database in cmd
-4. Run `.\run.bat` to start the app in cmd
-
-Important: When this guide references files, they are paths inside the project. For example, the settings file is `autoshop/settings.py` and templates live under `templates/`.
-
 Prerequisites:
-- Windows operating system
-- An internet connection (for the first run to download dependencies)
-- The scripts will check for Python and Node.js and attempt to install them if missing
+- Windows 10+
+- Python3.11+
+- Node.js
+- Extract the project anywhere
+- Rename the project 'a_shop' (no longer an issue)
+ 
+**Quick Start (Windows Only):** 
 
-## Easy Way (Windows): Use the PowerShell/CMD Scripts
+1. Move to the project directory:
+<img width="1918" height="137" alt="step1" src="https://github.com/user-attachments/assets/050e9319-aa56-4248-97cd-14eb2feb8b4f" />
+Run in powershell
 
-The easiest way to run AutoShop Pro is to use the provided PowerShell scripts. Open PowerShell in the project folder and follow these three steps:
+2. Create a virtual environment:
+<img width="1918" height="25" alt="step2" src="https://github.com/user-attachments/assets/f1f55d78-f3c7-4370-b631-aa6e163e29d8" />
+`python -m venv .venv`
+This creates a local virtual environment
 
-### Step 1: Install Dependencies
-```powershell
-.\install.ps1
-```
+3. Activate the virtual environment:
+<img width="1918" height="33" alt="step3" src="https://github.com/user-attachments/assets/dde0ffb7-53a0-4fa5-9dd4-5d9acef9ea4e" />
+`.\.venv\Scripts\Activate.ps1`
 
-This will automatically:
-- Check for Python and install it if missing (via winget if available)
-- Check for Node.js/npm and install if missing (via winget if available)
-- Create a Python virtual environment (if it doesn't exist)
-- Install all Python dependencies from `requirements.txt`
-- Install all Node.js dependencies via npm
-- Build the Tailwind CSS files
+4. Intall Django Dependency:
+<img width="1917" height="458" alt="step4" src="https://github.com/user-attachments/assets/4c435191-0088-4a52-8883-7d9229472233" />
 
-### Step 2: Initialize the Database
-```cmd
-.\initialize.bat
-```
+5. Close powershell, move to file explorer
 
-This will:
-- Run database migrations to set up tables
-- Prompt you to create an admin/superuser account (enter username, email, password)
-- Optionally seed demo data (customers, vehicles, jobs, parts)
+- Run `.\install.ps1` to install dependencies in powershell
+<img width="1038" height="887" alt="ps1_install" src="https://github.com/user-attachments/assets/1e56c76c-4c50-4eb7-8a55-cca0c04822b5" />
+For the sole powershell (install.ps1) script, left-click, then right click. When the menu appears, click on 'Run with powershell'
 
-### Step 3: Launch the App
-```cmd
-.\run.bat
-```
+- Run `.\initialize.bat` to set up the database in cmd (you can double click the .bat files like normal)
+<img width="1038" height="887" alt="ps1_install" src="https://github.com/user-attachments/assets/6938e562-41a8-49fb-9a71-51cfb8e4c221" />
+This batchfile asks you to create a username, email, and password.
+DO NOT LOSE THIS PASSWORD. I CAN NOT HELP YOU RECOVER IT!
+It also asks about demo data, which currently has to be deleted manually.
 
-The server will start at `http://127.0.0.1:8000/`. Open this URL in your web browser.
+- Run `.\run.bat` to start the app in cmd
+<img width="1038" height="887" alt="ps1_install" src="https://github.com/user-attachments/assets/8125ca56-074f-49ce-93d6-c48edc071ec2" />
+The server should now start, available at 127.0.0.1:8000, and can be stopped using Ctrl+C in the cmd.
 
-Press `Ctrl+C` in the PowerShell window to stop the server.
-
-**Note:** If you see an execution policy error, run this once first:
-```powershell
-Set-ExecutionPolicy -ExecutionPolicy RemoteSigned -Scope CurrentUser
-```
+**Important:**
+-When this guide references files, they are paths inside the project. For example, the settings file is `autoshop/settings.py` and templates live under `templates/`.
+- If you see an execution policy error, run this first in powershell:
+`Set-ExecutionPolicy -ExecutionPolicy RemoteSigned -Scope CurrentUser`
 
 If the scripts cannot auto-install Python or Node.js:
 - **Python**: Download from https://www.python.org/downloads/ (check "Add Python to PATH" during installation)
@@ -141,15 +133,13 @@ How to use key features:
 - Inventory: Use the "Inventory" page to view and manage parts.
 - Reports: Open "Reports" for quick daily/weekly summaries and revenue figures.
 
-v1.1 Changelog:
-- Added paginated job list with search and status filters (`jobs/urls.py`, `jobs/views.py`, `templates/jobs/job_list.html`).
-- The Kanban board now uses an optimistic UI update (the card moves immediately without reloading the page). The JS file is at `static/js/kanban.js`.
-- Added logging toggle in `autoshop/settings.py`.
-- Switched the app to local compiled CSS so it can run offline.
+v1.2 Changelog:
+- Synced Calender to dashboard
+- html tweaks
 
-Next steps and optional improvements:
+Planned improvements:
+- VIN-Decoder API integration
 - Use PostgreSQL for production: change `DATABASES` in `autoshop/settings.py` and install PostgreSQL server.
-- Add role-based permissions so technicians have reduced access compared to managers.
 - Add activity logs to track who changed job status when.
 - Implement richer reports (CSV export) and scheduled backups.
 
@@ -157,12 +147,6 @@ Troubleshooting tips:
 - If pages look unstyled, confirm you ran `npm run build:css` and that `static/css/style.css` exists.
 - If you see database errors, re-run `python manage.py migrate` and ensure the virtual environment is activated.
 - If you forget your superuser password, run `python manage.py createsuperuser --username manager --email manager@example.com` to recreate or use the Django admin to reset passwords.
-
-Publishing checklist before you upload to GitHub:
-- Do not commit `.venv/`, `venv/`, `node_modules/`, or `db.sqlite3`.
-- Keep `.env` out of Git. Use `.env.example` as the safe template.
-- Commit `package-lock.json` if you want repeatable CSS builds.
-- Commit `static/css/style.css` so the app works offline after clone.
 
 How to stop the local server:
 
