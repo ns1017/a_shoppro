@@ -1,4 +1,5 @@
 {% extends 'base.html' %}
+{% load static %}
 {% block title %}Dashboard | AutoShop Pro{% endblock %}
 {% block page_header %}
 <div class="mb-6 flex flex-col gap-4 sm:flex-row sm:items-end sm:justify-between">
@@ -9,6 +10,9 @@
     </div>
     <a href="{% url 'job_create' %}" class="inline-flex items-center justify-center rounded-2xl bg-blue-600 px-4 py-3 text-sm font-semibold text-white shadow-lg shadow-blue-600/20 transition hover:bg-blue-500">+ New Job</a>
 </div>
+{% endblock %}
+{% block extra_head %}
+    <link href="https://cdn.jsdelivr.net/npm/fullcalendar@5.11.3/main.min.css" rel="stylesheet">
 {% endblock %}
 {% block content %}
 <div class="grid gap-4 md:grid-cols-2 xl:grid-cols-4">
@@ -69,4 +73,17 @@
         </div>
     </div>
 </div>
+    <div class="mt-6">
+        <div class="panel rounded-3xl p-6">
+            <div class="mb-4 flex items-center justify-between">
+                <h2 class="text-lg font-semibold">Calendar</h2>
+                <p class="text-sm text-slate-500">Click an event to open job details</p>
+            </div>
+            <div id="dashboard-calendar"></div>
+        </div>
+    </div>
+{% endblock %}
+{% block extra_js %}
+    <script src="https://cdn.jsdelivr.net/npm/fullcalendar@5.11.3/main.min.js"></script>
+    <script src="{% static 'js/calendar.js' %}"></script>
 {% endblock %}
