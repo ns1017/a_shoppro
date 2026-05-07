@@ -30,10 +30,11 @@ This creates a local virtual environment
 
 `.\.venv\Scripts\Activate.ps1`
 
-4. Intall Django Dependency:
+4. Intall external libraries:
 <img width="1917" height="458" alt="step4" src="https://github.com/user-attachments/assets/4c435191-0088-4a52-8883-7d9229472233" />
 
 
+`python -m pip install -r requirements.txt` or
 `python -m pip install django pyvin`
 (pyvin not shown in picture)
 
@@ -67,7 +68,7 @@ The 'install.ps1' script attempts to auto-install Python and Node.js.
 However, this guide relies on you installing them beforehand.
 
 - **Python3.11+**: Download from https://www.python.org/downloads/ **(check "Add Python to PATH" during installation)**
-- **Node.js**: Download using `winget install OpenJS.NodeJS` or https://nodejs.org/ (npm comes with it)
+- **Node.js**: Download running `winget install OpenJS.NodeJS` in powershell or https://nodejs.org/ (npm comes with it)
 
 ## Manual Way (if you prefer step-by-step control)
 
