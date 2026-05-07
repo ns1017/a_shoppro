@@ -34,6 +34,9 @@ This creates a local virtual environment
 <img width="1917" height="458" alt="step4" src="https://github.com/user-attachments/assets/4c435191-0088-4a52-8883-7d9229472233" />
 
 
+`python -m pip install django pyvin`
+(pyvin not shown in picture)
+
 5. Close powershell, move to file explorer
 
 - Run `.\install.ps1` to install dependencies in powershell
