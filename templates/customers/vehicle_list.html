@@ -22,7 +22,7 @@
                 <th class="px-4 py-3 text-left font-medium">Customer</th>
                 <th class="px-4 py-3 text-left font-medium">VIN</th>
                 <th class="px-4 py-3 text-left font-medium">Plate</th>
-                <th class="px-4 py-3 text-left font-medium">Actions</th>
+                <th class="px-4 py-3 text-center font-medium">Actions</th>
             </tr>
         </thead>
         <tbody class="divide-y divide-slate-200 bg-white">
@@ -32,8 +32,8 @@
                 <td class="px-4 py-3 text-slate-600">{{ vehicle.customer.name }}</td>
                 <td class="px-4 py-3 text-slate-600">{{ vehicle.vin }}</td>
                 <td class="px-4 py-3 text-slate-600">{{ vehicle.license_plate|default:'-' }}</td>
-                <td class="px-4 py-3 text-right">
-                    <div class="flex items-center justify-end gap-3">
+                <td class="px-4 py-3 text-center">
+                    <div class="flex items-center justify-center gap-3">
                         <a href="{% url 'vehicle_edit' vehicle.id %}" class="font-medium text-blue-700 hover:text-blue-600">Edit</a>
                         {% if user.is_staff %}
                         <form method="post" action="{% url 'vehicle_delete' vehicle.id %}" onsubmit="return confirm('Delete this vehicle?');">

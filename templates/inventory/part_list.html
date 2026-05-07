@@ -19,7 +19,7 @@
                 <th class="px-4 py-3 text-left font-medium">Stock</th>
                 <th class="px-4 py-3 text-left font-medium">Reorder</th>
                 <th class="px-4 py-3 text-left font-medium">Unit Cost</th>
-                <th class="px-4 py-3 text-left font-medium">Actions</th>
+                <th class="px-4 py-3 text-center font-medium">Actions</th>
             </tr>
         </thead>
         <tbody class="divide-y divide-slate-200 bg-white">
@@ -30,8 +30,8 @@
                 <td class="px-4 py-3 text-slate-600">{{ part.quantity_in_stock }}</td>
                 <td class="px-4 py-3 text-slate-600">{{ part.reorder_level }}</td>
                 <td class="px-4 py-3 text-slate-600">${{ part.unit_cost|floatformat:2 }}</td>
-                <td class="px-4 py-3 text-right">
-                    <div class="flex items-center justify-end gap-3">
+                <td class="px-4 py-3 text-center">
+                    <div class="flex items-center justify-center gap-3">
                         <a href="{% url 'part_edit' part.id %}" class="font-medium text-blue-700 hover:text-blue-600">Edit</a>
                         {% if user.is_staff %}
                         <form method="post" action="{% url 'part_delete' part.id %}" onsubmit="return confirm('Delete this part?');">
