@@ -63,9 +63,11 @@ The server should now start, available at 127.0.0.1:8000, and can be stopped usi
 - If you see an execution policy error, run this first in powershell:
 `Set-ExecutionPolicy -ExecutionPolicy RemoteSigned -Scope CurrentUser`
 
-If the scripts cannot auto-install Python or Node.js:
-- **Python**: Download from https://www.python.org/downloads/ (check "Add Python to PATH" during installation)
-- **Node.js**: Download from https://nodejs.org/ (npm comes with it)
+The 'install.ps1' script attempts to auto-install Python and Node.js.
+However, this guide relies on you installing them beforehand.
+
+- **Python3.11+**: Download from https://www.python.org/downloads/ **(check "Add Python to PATH" during installation)**
+- **Node.js**: Download using `winget install OpenJS.NodeJS` or https://nodejs.org/ (npm comes with it)
 
 ## Manual Way (if you prefer step-by-step control)
 
