@@ -15,7 +15,7 @@ def dashboard(request):
     month_start = today.replace(day=1)
 
     jobs_today = Job.objects.filter(created_at__date=today).count()
-    jobs_scheduled = Job.objects.filter(appointment_date__date__gte=today).count()
+    jobs_scheduled = Job.objects.filter(appointment_date__isnull=False).count()
     waiting_parts = Job.objects.filter(status=Job.Status.WAITING).count()
     total_revenue_mtd = (
         Job.objects.filter(status=Job.Status.COMPLETED, created_at__date__gte=month_start)
