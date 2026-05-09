@@ -35,8 +35,8 @@ This creates a local virtual environment
 
 
 `python -m pip install -r requirements.txt` or
-`python -m pip install django pyvin`
-(pyvin not shown in picture)
+`python -m pip install django requests`
+(requests not shown in picture)
 
 5. Close powershell, move to file explorer
 
