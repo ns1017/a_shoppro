@@ -5,9 +5,9 @@ from customers.models import Customer, Vehicle
 
 class Job(models.Model):
     class Status(models.TextChoices):
-        WAITING = "waiting", "Waiting"
+        WAITING = "waiting", "Scheduled"
         IN_BAY = "in_bay", "In Bay"
-        READY = "ready", "Ready for Pickup"
+        READY = "ready", "Ready"
         COMPLETED = "completed", "Completed"
 
     customer = models.ForeignKey(Customer, on_delete=models.CASCADE, related_name="jobs")

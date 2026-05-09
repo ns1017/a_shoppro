@@ -1,8 +1,12 @@
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.contrib.auth.mixins import UserPassesTestMixin
+from django.core.cache import cache
 from django.db.models import Q
+from django.http import JsonResponse
 from django.urls import reverse_lazy
-from django.views.generic import CreateView, DetailView, ListView, UpdateView, DeleteView
+from django.views.generic import CreateView, DeleteView, DetailView, ListView, UpdateView, View
+
+from autoshop.vin_decode import decode_vin
 
 from .forms import CustomerForm, VehicleForm
 from .models import Customer, Vehicle
@@ -150,3 +154,24 @@ class VehicleDeleteView(LoginRequiredMixin, UserPassesTestMixin, DeleteView):
         except Exception:
             pass
         return response
+
+
+class VehicleVinDecodeView(LoginRequiredMixin, View):
+    cache_timeout = 60 * 60 * 24 * 30
+
+    def get(self, request, *args, **kwargs):
+        vin = (request.GET.get("vin") or "").strip().upper()
+        if len(vin) != 17:
+            return JsonResponse({"error": "VIN must be 17 characters long."}, status=400)
+
+        cache_key = f"vin-decode:{vin}"
+        cached_payload = cache.get(cache_key)
+        if cached_payload is not None:
+            return JsonResponse({**cached_payload, "cached": True})
+
+        decoded = decode_vin(vin)
+        if decoded.get("error"):
+            return JsonResponse(decoded, status=502)
+
+        cache.set(cache_key, decoded, self.cache_timeout)
+        return JsonResponse({**decoded, "cached": False})

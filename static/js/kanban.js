@@ -86,7 +86,16 @@ function initKanban() {
                     window.location.reload();
                 }
             } else {
-                alert('Unable to move job. Please refresh and try again.');
+                let message = 'Unable to move job due to appointment time and status constraints.';
+                try {
+                    const payload = await response.json();
+                    if (payload && payload.error) {
+                        message = payload.error;
+                    }
+                } catch (_err) {
+                    // Keep default message when response is not JSON.
+                }
+                alert(message);
             }
         });
     });

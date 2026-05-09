@@ -1,5 +1,4 @@
 {% extends 'base.html' %}
-{% load tz %}
 {% block title %}Job Details | AutoShop Pro{% endblock %}
 {% block page_header %}
 <div class="mb-6">
@@ -36,7 +35,7 @@
             <ul class="mt-2 space-y-2 text-sm text-slate-700">
                 <li><strong>Status:</strong> {{ object.get_status_display }}</li>
                 <li><strong>Technician:</strong> {{ object.technician|default:'Unassigned' }}</li>
-                <li><strong>Appointment:</strong> {% if object.appointment_date %}{{ object.appointment_date|localtime|date:"Y-m-d H:i" }}{% else %}-{% endif %}</li>
+                <li><strong>Appointment:</strong> {{ object.appointment_date|default:'-' }}</li>
                 <li><strong>Estimated:</strong> ${{ object.estimated_cost|floatformat:2 }}</li>
                 <li><strong>Actual:</strong> ${{ object.actual_cost|floatformat:2 }}</li>
                 <li><strong>Labor hours:</strong> {{ object.labor_hours|default:'-' }}</li>

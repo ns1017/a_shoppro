@@ -22,7 +22,7 @@
                 <th class="px-4 py-3 text-left font-medium">Phone</th>
                 <th class="px-4 py-3 text-left font-medium">Email</th>
                 <th class="px-4 py-3 text-left font-medium">Vehicles</th>
-                <th class="px-4 py-3 text-center font-medium">Actions</th>
+                <th class="px-4 py-3 text-left font-medium">Actions</th>
             </tr>
         </thead>
         <tbody class="divide-y divide-slate-200 bg-white">
@@ -32,8 +32,8 @@
                 <td class="px-4 py-3 text-slate-600">{{ customer.phone|default:'-' }}</td>
                 <td class="px-4 py-3 text-slate-600">{{ customer.email|default:'-' }}</td>
                 <td class="px-4 py-3 text-slate-600">{{ customer.vehicles.count }}</td>
-                <td class="px-4 py-3 text-center">
-                    <div class="flex items-center justify-center gap-3">
+                <td class="px-4 py-3 text-right">
+                    <div class="flex items-center justify-end gap-3">
                         <a href="{% url 'customer_detail' customer.id %}" class="font-medium text-blue-700 hover:text-blue-600">View</a>
                         <a href="{% url 'customer_edit' customer.id %}" class="font-medium text-slate-700 hover:text-slate-900">Edit</a>
                         {% if user.is_staff %}

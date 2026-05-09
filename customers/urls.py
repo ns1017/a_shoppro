@@ -12,4 +12,5 @@ urlpatterns = [
     path("vehicles/add/", views.VehicleCreateView.as_view(), name="vehicle_add"),
     path("vehicles/<int:pk>/edit/", views.VehicleUpdateView.as_view(), name="vehicle_edit"),
     path("vehicles/<int:pk>/delete/", views.VehicleDeleteView.as_view(), name="vehicle_delete"),
+    path("vehicles/decode-vin/", views.VehicleVinDecodeView.as_view(), name="vehicle_vin_decode"),
 ]

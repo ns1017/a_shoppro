@@ -9,6 +9,8 @@ from django.contrib.auth.mixins import UserPassesTestMixin
 from django.views.generic import ListView
 from django.utils.decorators import method_decorator
 from django.views.decorators.csrf import ensure_csrf_cookie
+from django.utils import timezone
+from datetime import timedelta
 
 from .forms import JobForm
 from .models import Job
@@ -26,11 +28,29 @@ class JobBoardView(LoginRequiredMixin, TemplateView):
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
+        now = timezone.now()
+        upcoming_cutoff = now + timedelta(hours=36)
+        completed_cutoff = now - timedelta(hours=36)
+
         context.update(
             {
-                "waiting_jobs": Job.objects.filter(status=Job.Status.WAITING).select_related("customer", "vehicle"),
-                "in_bay_jobs": Job.objects.filter(status=Job.Status.IN_BAY).select_related("customer", "vehicle"),
-                "ready_jobs": Job.objects.filter(status=Job.Status.READY).select_related("customer", "vehicle"),
+                "scheduled_jobs": Job.objects.filter(
+                    status=Job.Status.WAITING,
+                    appointment_date__isnull=False,
+                    appointment_date__gte=now,
+                    appointment_date__lte=upcoming_cutoff,
+                )
+                .select_related("customer", "vehicle")
+                .order_by("appointment_date", "created_at"),
+                "in_bay_jobs": Job.objects.filter(status=Job.Status.IN_BAY)
+                .select_related("customer", "vehicle")
+                .order_by("appointment_date", "created_at"),
+                "completed_jobs": Job.objects.filter(
+                    status=Job.Status.COMPLETED,
+                    updated_at__gte=completed_cutoff,
+                )
+                .select_related("customer", "vehicle")
+                .order_by("-updated_at"),
             }
         )
         return context
@@ -124,6 +144,34 @@ def update_job_status(request, pk):
     valid_statuses = {choice for choice, _label in Job.Status.choices}
     if status not in valid_statuses:
         return JsonResponse({"ok": False, "error": "Invalid status."}, status=400)
+
+    now = timezone.now()
+    if status == Job.Status.WAITING:
+        if not job.appointment_date:
+            return JsonResponse(
+                {
+                    "ok": False,
+                    "error": "Scheduled jobs must have an appointment date.",
+                },
+                status=400,
+            )
+        if not (now <= job.appointment_date <= now + timedelta(hours=36)):
+            return JsonResponse(
+                {
+                    "ok": False,
+                    "error": "Scheduled jobs must be within the next 36 hours. Update the appointment time first.",
+                },
+                status=400,
+            )
+
+    if status == Job.Status.COMPLETED and job.appointment_date and job.appointment_date > now + timedelta(days=3):
+        return JsonResponse(
+            {
+                "ok": False,
+                "error": "Jobs scheduled more than 3 days out cannot be marked completed. Update the appointment time first.",
+            },
+            status=400,
+        )
 
     old = job.status
     job.status = status
