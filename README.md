@@ -60,15 +60,49 @@ It also asks about demo data, which currently has to be deleted manually.
 The server should now start, available at 127.0.0.1:8000, and can be stopped using Ctrl+C in the cmd.
 
 **Important:**
--When this guide references files, they are paths inside the project. For example, the settings file is `autoshop/settings.py` and templates live under `templates/`.
+When this guide references files, they are paths inside the project. For example, the settings file is `autoshop/settings.py` and templates live under `templates/`.
 - If you see an execution policy error, run this first in powershell:
 `Set-ExecutionPolicy -ExecutionPolicy RemoteSigned -Scope CurrentUser`
-
-The 'install.ps1' script attempts to auto-install Python and Node.js.
-However, this guide relies on you installing them beforehand.
-
+- The 'install.ps1' script attempts to auto-install Python and Node.js. However, this guide relies on you installing them beforehand.
 - **Python3.11+**: Download from https://www.python.org/downloads/ **(check "Add Python to PATH" during installation)**
 - **Node.js**: Download running `winget install OpenJS.NodeJS` in powershell or https://nodejs.org/ (npm comes with it)
+
+How to use/key features:
+
+- Workflow / Kanban board: Click "Workflow" in the left sidebar. Drag a job card from one column to another to update its status. The board now moves cards instantly (optimistic update) and keeps the server in sync.
+- Add a job: Click "+ New Job" on the dashboard or workflow pages and fill out the form.
+- Job details: Open a job and click "View" to see parts, costs, and status. If you're a manager (staff user), you will see a "Delete" button.
+<img width="1920" height="1080" alt="job_board" src="https://github.com/user-attachments/assets/ed9f2278-f842-4667-97bb-4cfce7585062" />
+
+- Customers & Vehicles: Use the "Customers" and "Vehicles" pages to add or edit records. Using the vin field while adding a new vehicle, you can leverage the built in vin decoder to autofill some fields!
+<img width="1920" height="1080" alt="vin_decode" src="https://github.com/user-attachments/assets/850abb60-7fc6-4dcd-8694-0a5fe368187e" />
+
+- Inventory: Use the "Inventory" page to view and manage parts.
+<img width="1920" height="1080" alt="inventory" src="https://github.com/user-attachments/assets/be9f5993-6e24-4ac5-a99d-edbc0726e615" />
+
+- Reports: Not fully implimented. Planning on a financial focus and/or exporting documents/reports for jobs.
+
+- Dashboard: Congregates all job info with an interactive calender, recent job list, and overview of upcoming jobs.
+<img width="1920" height="1080" alt="dashboard" src="https://github.com/user-attachments/assets/9abe004b-ca46-48ed-a38e-927f92c0fd40" />
+
+
+v1.2 Changelog:
+- fixed kanban board mostly
+- integrated vin decoder and vin caching
+- added front end guardrails for impromper job scheduling and kanban conflicts
+
+Planned improvements:
+- Image/attachment upload in notes. im thinking voice notes could be useful as well as pictures.
+- Open access network wide; not just loopback.
+- Use PostgreSQL for production: change `DATABASES` in `autoshop/settings.py` and install PostgreSQL server.
+- Add activity logs to track who changed job status when.
+- Implement richer reports (CSV export) and scheduled backups. (reports tab)
+
+Troubleshooting tips:
+- If pages look unstyled, confirm you ran `npm run build:css` and that `static/css/style.css` exists.
+- If you see database errors, re-run `python manage.py migrate` and ensure the virtual environment is activated.
+- If you forget your superuser password, run `python manage.py createsuperuser --username manager --email manager@example.com` to recreate or use the Django admin to reset passwords.
+
 
 ## Manual Way (if you prefer step-by-step control)
 
@@ -141,30 +175,6 @@ Open a web browser and go to `http://127.0.0.1:8000/`. You should see the AutoSh
 
 - Click "Sign in" and use the superuser credentials you created with `createsuperuser` (or `manager` if you used the seed command).
 - Admin interface is at `http://127.0.0.1:8000/admin/` if you need to manage data directly.
-
-How to use key features:
-
-- Workflow / Kanban board: Click "Workflow" in the left sidebar. Drag a job card from one column to another to update its status. The board now moves cards instantly (optimistic update) and keeps the server in sync.
-- Add a job: Click "+ New Job" on the dashboard or workflow pages and fill out the form.
-- Job details: Open a job and click "View" to see parts, costs, and status. If you're a manager (staff user), you will see a "Delete" button.
-- Customers & Vehicles: Use the "Customers" and "Vehicles" pages to add or edit records. The VIN field is automatically uppercased.
-- Inventory: Use the "Inventory" page to view and manage parts.
-- Reports: Open "Reports" for quick daily/weekly summaries and revenue figures.
-
-v1.2 Changelog:
-- Synced Calender to dashboard
-- html tweaks
-
-Planned improvements:
-- VIN-Decoder API integration
-- Use PostgreSQL for production: change `DATABASES` in `autoshop/settings.py` and install PostgreSQL server.
-- Add activity logs to track who changed job status when.
-- Implement richer reports (CSV export) and scheduled backups.
-
-Troubleshooting tips:
-- If pages look unstyled, confirm you ran `npm run build:css` and that `static/css/style.css` exists.
-- If you see database errors, re-run `python manage.py migrate` and ensure the virtual environment is activated.
-- If you forget your superuser password, run `python manage.py createsuperuser --username manager --email manager@example.com` to recreate or use the Django admin to reset passwords.
 
 How to stop the local server:
 
