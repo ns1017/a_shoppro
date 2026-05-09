@@ -95,6 +95,7 @@ Planned improvements:
 - Image/attachment upload in notes. im thinking voice notes could be useful as well as pictures.
 - Open access network wide; not just loopback.
 - Autofill for common jobs (can vary between shops)
+- Low part availability alert(s)
 - Use PostgreSQL for production: change `DATABASES` in `autoshop/settings.py` and install PostgreSQL server.
 - Add activity logs to track who changed job status when.
 - Implement richer reports (CSV export) and scheduled backups. (reports tab)
