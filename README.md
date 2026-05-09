@@ -9,7 +9,7 @@ Prerequisites:
 - Extract the project anywhere
 - Rename the project 'a_shop' (no longer an issue)
  
-**Quick Start (Windows Only):** 
+**Quick start using powershell:** 
 
 1. Move to the project directory:
 <img width="1918" height="137" alt="step1" src="https://github.com/user-attachments/assets/050e9319-aa56-4248-97cd-14eb2feb8b4f" />
