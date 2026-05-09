@@ -100,12 +100,6 @@ Planned improvements:
 - Add activity logs to track who changed job status when.
 - Implement richer reports (CSV export) and scheduled backups. (reports tab)
 
-Troubleshooting tips:
-- If pages look unstyled, confirm you ran `npm run build:css` and that `static/css/style.css` exists.
-- If you see database errors, re-run `python manage.py migrate` and ensure the virtual environment is activated.
-- If you forget your superuser password, run `python manage.py createsuperuser --username manager --email manager@example.com` to recreate or use the Django admin to reset passwords.
-
-
 ## Manual Way (if you prefer step-by-step control)
 
 1) Create and activate a Python virtual environment
@@ -182,3 +176,7 @@ How to stop the local server:
 
 Press Ctrl+C in the PowerShell window where `runserver` is running.
 
+Troubleshooting tips:
+- If pages look unstyled, confirm you ran `npm run build:css` and that `static/css/style.css` exists.
+- If you see database errors, re-run `python manage.py migrate` and ensure the virtual environment is activated.
+- If you forget your superuser password, run `python manage.py createsuperuser --username manager --email manager@example.com` to recreate or use the Django admin to reset passwords.
