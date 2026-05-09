@@ -86,7 +86,7 @@ How to use/key features:
 <img width="1920" height="1080" alt="dashboard" src="https://github.com/user-attachments/assets/9abe004b-ca46-48ed-a38e-927f92c0fd40" />
 
 
-v1.2 Changelog:
+v1.3 Changelog:
 - fixed kanban board mostly
 - integrated vin decoder and vin caching
 - added front end guardrails for impromper job scheduling and kanban conflicts
@@ -94,6 +94,7 @@ v1.2 Changelog:
 Planned improvements:
 - Image/attachment upload in notes. im thinking voice notes could be useful as well as pictures.
 - Open access network wide; not just loopback.
+- Autofill for common jobs (can vary between shops)
 - Use PostgreSQL for production: change `DATABASES` in `autoshop/settings.py` and install PostgreSQL server.
 - Add activity logs to track who changed job status when.
 - Implement richer reports (CSV export) and scheduled backups. (reports tab)
