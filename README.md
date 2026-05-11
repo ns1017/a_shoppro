@@ -61,7 +61,7 @@ This will ask if you want to start the application on device-only or network wid
 <img width="2566" height="1392" alt="run2" src="https://github.com/user-attachments/assets/985b71be-5e8c-4d5d-a3f2-51aecdb20d3b" />
 
 If option 2 is chosen, the access address will be displayed in the terminal while the app is running.
-To access the app on another machine, simply type the provided IP into any browser on any device on the same network.
+To access the app on another machine, simply type the provided IP and port (xxx.xxx.xxx.xxx:8000) into any browser on any device on the same network.
 Press Ctrl+C in the PowerShell window where `run.bat` is running to stop the application safely.
 
 **Important:**
