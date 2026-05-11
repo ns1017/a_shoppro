@@ -8,6 +8,7 @@ class Customer(models.Model):
     address = models.TextField(blank=True)
     notes = models.TextField(blank=True)
     created_at = models.DateTimeField(auto_now_add=True)
+    is_demo_data = models.BooleanField(default=False, db_index=True)
 
     class Meta:
         ordering = ["name"]
@@ -26,6 +27,7 @@ class Vehicle(models.Model):
     mileage = models.PositiveIntegerField(default=0)
     notes = models.TextField(blank=True)
     created_at = models.DateTimeField(auto_now_add=True)
+    is_demo_data = models.BooleanField(default=False, db_index=True)
 
     class Meta:
         ordering = ["-created_at"]
