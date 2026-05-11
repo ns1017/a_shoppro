@@ -75,6 +75,14 @@ STATIC_URL = "static/"
 STATICFILES_DIRS = [BASE_DIR / "static"]
 DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
 
+# Media files configuration
+MEDIA_URL = "media/"
+MEDIA_ROOT = BASE_DIR / "media"
+
+# File upload settings - 25MB limit
+FILE_UPLOAD_MAX_MEMORY_SIZE = 26214400  # 25MB in bytes
+DATA_UPLOAD_MAX_MEMORY_SIZE = 26214400  # 25MB in bytes
+
 CACHES = {
     "default": {
         "BACKEND": "django.core.cache.backends.locmem.LocMemCache",
