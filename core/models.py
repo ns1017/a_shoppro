@@ -20,6 +20,7 @@ class ActivityLog(models.Model):
     object_id = models.CharField(max_length=64, blank=True)
     extra = models.TextField(blank=True)
     timestamp = models.DateTimeField(auto_now_add=True)
+    is_demo_data = models.BooleanField(default=False, db_index=True)
 
     class Meta:
         ordering = ["-timestamp"]
