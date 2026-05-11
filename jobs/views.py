@@ -165,11 +165,15 @@ def update_job_status(request, pk):
                 },
                 status=400,
             )
-        if not (now <= job.appointment_date <= now + timedelta(hours=36)):
+        # Allow a 30-minute grace window: jobs whose appointment was up to 30
+        # minutes ago may still be moved back to WAITING. This prevents small
+        # clock-drift or brief in-bay transitions from blocking the user.
+        grace_start = now - timedelta(minutes=30)
+        if not (grace_start <= job.appointment_date <= now + timedelta(hours=36)):
             return JsonResponse(
                 {
                     "ok": False,
-                    "error": "Scheduled jobs must be within the next 36 hours. Update the appointment time first.",
+                    "error": "Scheduled jobs must be within the next 36 hours (30-minute grace allowed). Update the appointment time first.",
                 },
                 status=400,
             )
