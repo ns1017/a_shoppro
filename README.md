@@ -99,8 +99,9 @@ In the job view/editing tab, you can see an attachment thumbnail if applicable, 
 With the addition of network configuration in `run.bat`, you can now access the application from across your network including on mobile. Though, the kanban board is not fully functional on mobile.
 
 v1.4 Changelog:
-- attachment uploads & notes
+- Attachment uploads & notes
 - Network access
+- Polished login page
 
 Planned improvements:
 - Polish mobile UI
