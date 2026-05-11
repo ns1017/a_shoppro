@@ -1,4 +1,4 @@
-vafrom django.db import models
+from django.db import models
 
 from customers.models import Customer, Vehicle
 
@@ -22,6 +22,7 @@ class Job(models.Model):
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
     parts = models.ManyToManyField("inventory.Part", through="JobPart", related_name="jobs", blank=True)
+    is_demo_data = models.BooleanField(default=False, db_index=True)
 
     class Meta:
         ordering = ["-created_at"]
@@ -34,6 +35,7 @@ class JobPart(models.Model):
     job = models.ForeignKey(Job, on_delete=models.CASCADE, related_name="job_parts")
     part = models.ForeignKey("inventory.Part", on_delete=models.CASCADE, related_name="job_parts")
     quantity_used = models.PositiveIntegerField(null=True, blank=True)
+    is_demo_data = models.BooleanField(default=False, db_index=True)
 
     class Meta:
         unique_together = ("job", "part")
@@ -56,6 +58,7 @@ class JobAttachment(models.Model):
     description = models.CharField(max_length=255, blank=True)
     uploaded_by = models.ForeignKey('auth.User', on_delete=models.SET_NULL, null=True, blank=True)
     uploaded_at = models.DateTimeField(auto_now_add=True)
+    is_demo_data = models.BooleanField(default=False, db_index=True)
     
     class Meta:
         ordering = ['-uploaded_at']
