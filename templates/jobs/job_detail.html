@@ -60,5 +60,68 @@
     <div class="mt-6 flex gap-3">
         <a href="{% url 'job_board' %}" class="rounded-2xl border border-slate-300 bg-white px-4 py-3 font-semibold text-slate-700 hover:bg-slate-50">Back to board</a>
     </div>
+
+<div class="mt-6">
+    <h3 class="text-sm font-medium text-slate-600">Attachments</h3>
+    <div class="mt-3 space-y-4">
+        {% for attachment in object.attachments.all %}
+            <div class="rounded-3xl border border-slate-200 bg-white p-5 flex flex-col gap-4">
+                
+                <!-- Attachment Preview / Icon -->
+                <div class="flex justify-center">
+                    {% if attachment.attachment_type == 'image' %}
+                        <img src="{{ attachment.file.url }}" 
+                             alt="attachment" 
+                             class="max-h-48 rounded-2xl object-contain border border-slate-100">
+                    {% elif attachment.attachment_type == 'audio' %}
+                        <span class="text-6xl">🎙️</span>
+                    {% else %}
+                        <span class="text-6xl">📄</span>
+                    {% endif %}
+                </div>
+
+                <!-- Attachment Info -->
+                <div class="text-center">
+                    <p class="text-sm font-medium break-words text-slate-800">
+                        {{ attachment.file.name|truncatechars:65 }}
+                    </p>
+                    <p class="text-xs text-slate-500 mt-1">
+                        {{ attachment.uploaded_at|date:"M d, Y H:i" }} • {{ attachment.get_attachment_type_display }}
+                    </p>
+                    {% if attachment.description %}
+                        <p class="text-xs text-slate-500 mt-2 italic">
+                            "{{ attachment.description }}"
+                        </p>
+                    {% endif %}
+                </div>
+
+                <!-- Action Buttons -->
+                <div class="flex justify-center gap-4 pt-2 border-t border-slate-100">
+                    <a href="{{ attachment.file.url }}" 
+                       download 
+                       target="_blank"
+                       class="flex items-center gap-2 rounded-xl bg-blue-50 px-5 py-2.5 text-sm font-medium text-blue-700 hover:bg-blue-100 transition-colors">
+                        ↓ Download
+                    </a>
+                    
+                    {% if user.is_staff or user == attachment.uploaded_by %}
+                        <form method="post" 
+                              action="{% url 'delete_attachment' object.id attachment.id %}" 
+                              class="inline"
+                              onsubmit="return confirm('Delete this attachment?');">
+                            {% csrf_token %}
+                            <button type="submit"
+                                    class="flex items-center gap-2 rounded-xl bg-red-50 px-5 py-2.5 text-sm font-medium text-red-700 hover:bg-red-100 transition-colors">
+                                🗑 Delete
+                            </button>
+                        </form>
+                    {% endif %}
+                </div>
+                
+            </div>
+        {% empty %}
+            <div class="text-sm text-slate-500 italic">No attachments yet.</div>
+        {% endfor %}
+    </div>
 </div>
 {% endblock %}
