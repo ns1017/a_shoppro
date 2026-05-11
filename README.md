@@ -35,8 +35,8 @@ This creates a local virtual environment
 
 
 `python -m pip install -r requirements.txt` or
-`python -m pip install django requests`
-(requests not shown in picture)
+`python -m pip install django requests pillow`
+(requests & pillow not shown in picture)
 
 5. Close powershell, move to file explorer
 
@@ -54,15 +54,21 @@ DO NOT LOSE THIS PASSWORD. I CAN NOT HELP YOU RECOVER IT!
 It also asks about demo data, which currently has to be deleted manually.
 
 - Run `.\run.bat` to start the app in cmd
-<img width="1920" height="1080" alt="server_running" src="https://github.com/user-attachments/assets/9a8c2d3f-1392-451a-8663-0da99794723d" />
+<img width="2560" height="1392" alt="run1" src="https://github.com/user-attachments/assets/c9e641cd-2238-4e02-b104-7553c4247f8e" />
 
+This will ask if you want to start the application on device-only or network wide
 
-The server should now start, available at 127.0.0.1:8000, and can be stopped using Ctrl+C in the cmd.
+<img width="2566" height="1392" alt="run2" src="https://github.com/user-attachments/assets/985b71be-5e8c-4d5d-a3f2-51aecdb20d3b" />
+
+If option 2 is chosen, the access address will be displayed in the terminal while the app is running.
+To access the app on another machine, simply type the provided IP into any browser on any device on the same network.
+Press Ctrl+C in the PowerShell window where `run.bat` is running to stop the application safely.
 
 **Important:**
 When this guide references files, they are paths inside the project. For example, the settings file is `autoshop/settings.py` and templates live under `templates/`.
 - If you see an execution policy error, run this first in powershell:
 `Set-ExecutionPolicy -ExecutionPolicy RemoteSigned -Scope CurrentUser`
+- You may have to disable 'Smart App Control' in Windows Defender
 - The 'install.ps1' script attempts to auto-install Python and Node.js. However, this guide relies on you installing them beforehand.
 - **Python3.11+**: Download from https://www.python.org/downloads/ **(check "Add Python to PATH" during installation)**
 - **Node.js**: Download running `winget install OpenJS.NodeJS` in powershell or https://nodejs.org/ (npm comes with it)
@@ -74,8 +80,10 @@ How to use/key features:
 - Job details: Open a job and click "View" to see parts, costs, and status. If you're a manager (staff user), you will see a "Delete" button.
 <img width="1920" height="1080" alt="job_board" src="https://github.com/user-attachments/assets/ed9f2278-f842-4667-97bb-4cfce7585062" />
 
-- Customers & Vehicles: Use the "Customers" and "Vehicles" pages to add or edit records. Using the vin field while adding a new vehicle, you can leverage the built in vin decoder to autofill some fields!
-<img width="1920" height="1080" alt="vin_decode" src="https://github.com/user-attachments/assets/850abb60-7fc6-4dcd-8694-0a5fe368187e" />
+- Customers & Vehicles: Use the "Customers" and "Vehicles" pages to add or edit records. Using the vin field while adding a new vehicle, you can leverage the built in vin decoder to autofill some fields. Now fully supports by-job attachment uploads (voice recording, picture, or text file).
+<img width="1920" height="1080" alt="jobform1" src="https://github.com/user-attachments/assets/67cf6afc-3fe1-475e-9919-da0d79da8cdf" />
+
+In the job view/editing tab, you can see an attachment thumbnail if applicable, add a note, download the file, and delete them.
 
 - Inventory: Use the "Inventory" page to view and manage parts.
 <img width="1920" height="1080" alt="inventory" src="https://github.com/user-attachments/assets/be9f5993-6e24-4ac5-a99d-edbc0726e615" />
@@ -85,15 +93,17 @@ How to use/key features:
 - Dashboard: Congregates all job info with an interactive calender, recent job list, and overview of upcoming jobs.
 <img width="1920" height="1080" alt="dashboard" src="https://github.com/user-attachments/assets/9abe004b-ca46-48ed-a38e-927f92c0fd40" />
 
+- Wireless/Mobile network access:
+<img width="645" height="1398" alt="IMG_3600" src="https://github.com/user-attachments/assets/a8e9f43b-55ce-4ed5-9edc-8069338ff5fe" />
 
-v1.3 Changelog:
-- fixed kanban board mostly
-- integrated vin decoder and vin cacheing
-- added front end guardrails for impromper job scheduling and kanban conflicts
+With the addition of network configuration in `run.bat`, you can now access the application from across your network including on mobile. Though, the kanban board is not fully functional on mobile.
+
+v1.4 Changelog:
+- attachment uploads & notes
+- Network access
 
 Planned improvements:
-- Image/attachment upload in notes. im thinking voice notes could be useful as well as pictures.
-- Open access network wide; not just loopback.
+- Polish mobile UI
 - Autofill for common jobs (can vary between shops)
 - Low part availability alert(s)
 - Use PostgreSQL for production: change `DATABASES` in `autoshop/settings.py` and install PostgreSQL server.
@@ -121,7 +131,7 @@ With the virtual environment activated, install dependencies listed in `requirem
 pip install -r requirements.txt
 ```
 
-This installs Django. For local development we use SQLite (no extra setup).
+This installs Django. For local development use SQLite is used.
 
 3) Initialize the database (migrations)
 
