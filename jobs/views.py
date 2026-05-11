@@ -1,7 +1,7 @@
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.mixins import LoginRequiredMixin
-from django.http import JsonResponse
-from django.shortcuts import get_object_or_404
+from django.http import JsonResponse, Http404
+from django.shortcuts import get_object_or_404, redirect
 from django.urls import reverse_lazy
 from django.views.decorators.http import require_POST
 from django.views.generic import CreateView, TemplateView, UpdateView, DetailView, DeleteView
@@ -13,7 +13,7 @@ from django.utils import timezone
 from datetime import timedelta
 
 from .forms import JobForm
-from .models import Job
+from .models import Job, JobAttachment
 from django.db import models
 
 from core.utils import log_activity
@@ -62,6 +62,11 @@ class JobCreateView(LoginRequiredMixin, CreateView):
     template_name = "jobs/job_form.html"
     success_url = reverse_lazy("job_board")
 
+    def get_form_kwargs(self):
+        kwargs = super().get_form_kwargs()
+        kwargs['user'] = self.request.user
+        return kwargs
+
     def form_valid(self, form):
         response = super().form_valid(form)
         try:
@@ -76,6 +81,11 @@ class JobUpdateView(LoginRequiredMixin, UpdateView):
     form_class = JobForm
     template_name = "jobs/job_form.html"
     success_url = reverse_lazy("job_board")
+
+    def get_form_kwargs(self):
+        kwargs = super().get_form_kwargs()
+        kwargs['user'] = self.request.user
+        return kwargs
 
     def form_valid(self, form):
         response = super().form_valid(form)
@@ -197,3 +207,20 @@ def get_vehicles_by_customer(request):
         return JsonResponse({"vehicles": list(vehicles)})
     except (ValueError, TypeError):
         return JsonResponse({"vehicles": []}, status=400)
+
+
+@require_POST
+@login_required
+def delete_job_attachment(request, pk, attachment_id):
+    """Delete a job attachment. Only staff or the uploader can delete."""
+    job = get_object_or_404(Job, pk=pk)
+    attachment = get_object_or_404(JobAttachment, pk=attachment_id, job=job)
+    
+    # Permission check - allow if staff or uploader
+    if not (request.user.is_staff or request.user == attachment.uploaded_by):
+        raise Http404()
+    
+    attachment.file.delete()
+    attachment.delete()
+    
+    return redirect('job_detail', pk=pk)
