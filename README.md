@@ -1,4 +1,4 @@
-# AutoShop Pro — Step-by-step
+# AutoShop Pro
 
 This repository contains the AutoShop Pro web app built with Django. Below is my best attempt at clear instructions for someone who isn't technically inclined.
 
@@ -21,21 +21,30 @@ Prerequisites:
 <img width="1918" height="25" alt="step2" src="https://github.com/user-attachments/assets/f1f55d78-f3c7-4370-b631-aa6e163e29d8" />
 
 
-`python -m venv .venv`
+```bash
+python -m venv .venv
+```
 This creates a local virtual environment
 
 3. Activate the virtual environment:
 <img width="1918" height="33" alt="step3" src="https://github.com/user-attachments/assets/dde0ffb7-53a0-4fa5-9dd4-5d9acef9ea4e" />
 
 
-`.\.venv\Scripts\Activate.ps1`
+```bash
+.\.venv\Scripts\Activate.ps1
+```
 
 4. Install external libraries:
 <img width="1917" height="458" alt="step4" src="https://github.com/user-attachments/assets/4c435191-0088-4a52-8883-7d9229472233" />
 
 
-`python -m pip install -r requirements.txt` or
-`python -m pip install django requests pillow`
+```bash
+python -m pip install -r requirements.txt
+``` 
+or
+```bash
+python -m pip install django requests pillow
+```
 (requests & pillow not shown in picture)
 
 5. Close powershell, move to file explorer
@@ -61,7 +70,7 @@ This will ask if you want to start the application on device-only or network wid
 <img width="2566" height="1392" alt="run2" src="https://github.com/user-attachments/assets/985b71be-5e8c-4d5d-a3f2-51aecdb20d3b" />
 
 If option 2 is chosen, the access address will be displayed in the terminal while the app is running.
-To access the app on another machine, simply type the provided IP and port (xxx.xxx.xxx.xxx:8000) into any browser on any device on the same network.
+To access the app on another machine, simply type the provided IP into any browser on any device on the same network.
 Press Ctrl+C in the PowerShell window where `run.bat` is running to stop the application safely.
 
 **Important:**
@@ -98,10 +107,17 @@ In the job view/editing tab, you can see an attachment thumbnail if applicable, 
 
 With the addition of network configuration in `run.bat`, you can now access the application from across your network including on mobile. Though, the kanban board is not fully functional on mobile.
 
-v1.4 Changelog:
+v1.4.1 Changelog:
 - Attachment uploads & notes
 - Network access
 - Polished login page
+- Expanded demo data
+- touch-up kanban board scheduling restrictions
+
+Known Issues:
+- Demo data initialization says '0 jobs added', when it adds ~15 jobs
+- Some demo data will be overwritten on edit due to auto vin decoding
+- Kanban is not interactive on mobile
 
 Planned improvements:
 - Polish mobile UI
@@ -111,13 +127,13 @@ Planned improvements:
 - Add activity logs to track who changed job status when.
 - Implement richer reports (CSV export) and scheduled backups. (reports tab)
 
-## Manual Way (if you prefer step-by-step control)
+## Manual Way 
 
 1) Create and activate a Python virtual environment
 
 Open PowerShell in the project folder (the folder that contains `manage.py`). Then run these commands, one line at a time:
 
-```
+```bash
 cd a_shop
 python -m venv .venv
 .\.venv\Scripts\Activate.ps1
@@ -128,7 +144,7 @@ python -m venv .venv
 
 With the virtual environment activated, install dependencies listed in `requirements.txt`:
 
-```
+```bash
 pip install -r requirements.txt
 ```
 
@@ -139,7 +155,8 @@ This installs Django. For local development use SQLite is used.
 Run these commands to create the database tables and a demo manager user:
 
 Follow the prompts to enter a username (for example `manager`), email (optional), and password.
-```
+
+```bash
 python manage.py migrate
 python manage.py createsuperuser
 python manage.py seed_demo_data
@@ -155,7 +172,7 @@ This project is set up to work without any internet connection. It uses a locall
 
 If you have not done this yet, run:
 
-```
+```bash
 npm install
 npm run build:css
 ```
@@ -164,7 +181,7 @@ That creates `static/css/style.css` locally.
 
 If you want CSS to rebuild automatically while you edit templates, run this in a second terminal:
 
-```
+```bash
 npm run watch:css
 ```
 
@@ -172,7 +189,7 @@ npm run watch:css
 
 Start the app locally:
 
-```
+```bash
 python manage.py runserver
 ```
 
@@ -191,3 +208,37 @@ Troubleshooting tips:
 - If pages look unstyled, confirm you ran `npm run build:css` and that `static/css/style.css` exists.
 - If you see database errors, re-run `python manage.py migrate` and ensure the virtual environment is activated.
 - If you forget your superuser password, run `python manage.py createsuperuser --username manager --email manager@example.com` to recreate or use the Django admin to reset passwords.
+
+### Migrations
+
+Running `python manage.py makemigrations` produced migrations to add the `is_demo_data` fields; run migrations locally to apply them:
+
+```bash
+python manage.py makemigrations
+python manage.py migrate
+```
+
+### How to use the new demo tools
+
+Seed demo data (idempotent):
+
+```bash
+python manage.py seed_demo_data
+# or seed after cleaning up existing demo data
+python manage.py seed_demo_data --cleanup
+```
+
+Delete all demo data (interactive):
+
+```bash
+python manage.py delete_demo_data
+# non-interactive (CI/scripts):
+python manage.py delete_demo_data --no-confirm
+```
+
+### Notes
+
+- After seeding, scheduled demo jobs will appear in the Kanban column "Scheduled (Next 36 Hours)".
+- The server-side scheduling validation now permits a 30-minute grace window for moving jobs back to `WAITING`. If you prefer this value configurable, I can add a setting (e.g. `JOB_SCHEDULE_GRACE_MINUTES`) and wire it into the validation.
+
+If you'd like, I can also update the admin or list views to display an `is_demo_data` badge for easier identification of demo records.
