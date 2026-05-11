@@ -15,7 +15,14 @@ Prerequisites:
 <img width="1918" height="137" alt="step1" src="https://github.com/user-attachments/assets/050e9319-aa56-4248-97cd-14eb2feb8b4f" />
 
 
-`cd DriveLetter:\...\a_shoppro-main` or `cd DriveLetter:\...\a_shop` if you changed the filename.
+```bash
+cd DriveLetter:\...\a_shoppro-main
+```
+or
+```bash
+cd DriveLetter:\...\a_shop
+```
+if you changed the filename.
 
 2. Create a virtual environment:
 <img width="1918" height="25" alt="step2" src="https://github.com/user-attachments/assets/f1f55d78-f3c7-4370-b631-aa6e163e29d8" />
