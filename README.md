@@ -126,13 +126,13 @@ Known Issues:
 - Some demo data will be overwritten on edit due to auto vin decoding
 - Kanban is not interactive on mobile
 
-Planned improvements:
+Planned improvements (in order):
 - Polish mobile UI
-- Autofill for common jobs (can vary between shops)
+- Implement richer reports (CSV export) and scheduled backups. (reports tab) **Ideally want to put out a full product in the next month, meaning all tabs are finished.
 - Low part availability alert(s)
-- Use PostgreSQL for production: change `DATABASES` in `autoshop/settings.py` and install PostgreSQL server.
 - Add activity logs to track who changed job status when.
-- Implement richer reports (CSV export) and scheduled backups. (reports tab)
+- Autofill for common jobs (can vary between shops)
+- Use PostgreSQL for production: change `DATABASES` in `autoshop/settings.py` and install PostgreSQL server.
 
 ## Manual Way 
 
